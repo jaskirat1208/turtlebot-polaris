@@ -29,3 +29,6 @@ Terminal D:
 ```
 
 There is also a launch file in the project, however, there is an issue with the services due to which a turtle cannot be spawned.
+
+# Example output
+![](https://github.com/jaskirat1208/turtlebot-polaris/blob/jaskirat/extras/following_turtlebot.gif)
