@@ -1,0 +1,21 @@
+#! /usr/bin/env python
+import rospy
+
+from polaris_follower.controller import Controller
+from polaris_follower.turtle import Turtle
+
+
+def main():
+    rospy.init_node('Controller')
+
+    # Initialize and spawn the turtles
+    src = Turtle('turtle2')
+    src.spawn(1, 1, 90)
+    dest = Turtle('turtle1')
+
+    # Initialize the controller
+    Controller(src, dest)
+
+
+if __name__ == '__main__':
+    main()

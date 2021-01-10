@@ -1,5 +1,8 @@
 from math import atan2
 
+import rospy
+from turtlesim.srv import Spawn
+
 from .constants import *
 
 from geometry_msgs.msg import Twist
@@ -20,6 +23,7 @@ class Turtle:
             - /<@param turtle_name>/<@param pose_topic_substr>
             - /<@param turtle_name>/<@param vel_topic_substr>
         """
+        self.turtle_name = turtle_name
         self.pose_topic = {
             KEY_TOPIC_NAME: str.format('/{}/{}', turtle_name, pose_topic_substr),
             KEY_TOPIC_MSG_TYPE: pose_msg_type
@@ -61,3 +65,13 @@ class Turtle:
         vel_msg = Twist()
         vel_msg.angular.z = dest_theta - self.pose.theta
         return vel_msg
+
+    def spawn(self, x, y, theta):
+        rospy.wait_for_service('/spawn')
+        try:
+
+            spn = rospy.ServiceProxy('/spawn', Spawn)
+            spn(x, y, theta, self.turtle_name)
+        except rospy.ServiceException as e:
+            rospy.logwarn("Service call failed, spawn")
+            rospy.logwarn(e)

@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/../polaris_follower/.idea/auto-align-turtlesim.iml" filepath="$PROJECT_DIR$/../polaris_follower/.idea/auto-align-turtlesim.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/turtlebot-polaris.iml" filepath="$PROJECT_DIR$/.idea/turtlebot-polaris.iml" />
     </modules>
   </component>
 </project>

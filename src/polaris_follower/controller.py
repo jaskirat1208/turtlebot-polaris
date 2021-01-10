@@ -12,7 +12,6 @@ class Controller:
         @param src: Source node
         @param dest: Destination node
         """
-        rospy.init_node('Main')
         self.src = src
         self.dest = dest
 
