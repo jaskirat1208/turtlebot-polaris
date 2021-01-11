@@ -1,3 +1,5 @@
+import rospy
+
 from polaris_follower.constants import *
 
 
@@ -16,6 +18,7 @@ class Base:
             - /<@param turtle_name>/<@param pose_topic_substr>
             - /<@param turtle_name>/<@param vel_topic_substr>
         """
+        rospy.loginfo(str.format("Initializing {} of type: {}", turtle_name, self.__class__))
         self.object_name = turtle_name
         self.object_ns = namespace
 
@@ -28,9 +31,16 @@ class Base:
             KEY_TOPIC_NAME: str.format('/{}/{}/{}', self.object_ns, self.object_name, vel_topic_substr),
             KEY_TOPIC_MSG_TYPE: vel_msg_type
         }
+        rospy.loginfo("Pose topic:")
+        rospy.loginfo(self.pose_topic)
+
+        rospy.loginfo("Vel Topic:")
+        rospy.loginfo(self.vel_topic)
 
         # Spawn service
         self.spawn_service = str.format('/{}/spawn', self.object_ns)
+        rospy.loginfo("Spawn service:")
+        rospy.loginfo(self.spawn_service)
 
         self.pose = pose_msg_type()
 

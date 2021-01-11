@@ -16,7 +16,8 @@ def main():
     dest = Turtle('turtle1')
 
     # Initialize the controller
-    Controller(src, dest)
+    controller = Controller(src, dest)
+    controller.simulate()
 
 
 if __name__ == '__main__':

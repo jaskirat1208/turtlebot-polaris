@@ -1,13 +1,14 @@
+# Basic imports
 from math import atan2
 
+# ROS imports
 import rospy
-from turtlesim.srv import Spawn
-
-from polaris_follower.constants import *
 
 from geometry_msgs.msg import Twist
 from turtlesim.msg import Pose
+from turtlesim.srv import Spawn
 
+# Local imports
 from polaris_follower.objects.base import Base
 
 
@@ -39,9 +40,15 @@ class Turtle(Base):
         vel_msg.angular.z = dest_theta - self.pose.theta
         return vel_msg
 
+    def get_position_coordinates(self):
+        """
+        :return: returns a turtlesim.msg -> Pose object
+        """
+        return self.pose
+
     def spawn(self, pose_coordinates):
         """
-        :param pose_coordinates: (x, y, theta)
+        :param pose_coordinates: turtlesim.msg -> Pose object
         """
         rospy.wait_for_service(self.spawn_service)
         try:
