@@ -3,7 +3,7 @@ import rospy
 from turtlesim.msg import Pose
 
 from polaris_follower.controller import Controller
-from polaris_follower.objects.turtle import Turtle
+from polaris_follower.robots.turtle import Turtle
 
 
 def main():

@@ -9,7 +9,7 @@ from turtlesim.msg import Pose
 from turtlesim.srv import Spawn
 
 # Local imports
-from polaris_follower.objects.base import Base
+from polaris_follower.robots.base import Base
 
 
 class Turtle(Base):

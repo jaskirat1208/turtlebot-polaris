@@ -34,6 +34,9 @@ class Controller:
         self.src_vel_pub.publish(msg)
 
     def simulate(self):
+        """
+        Simulating the robots
+        """
         src_pose_tpc = self.src.get_pose_topic()
         dest_pose_tpc = self.dest.get_pose_topic()
 
