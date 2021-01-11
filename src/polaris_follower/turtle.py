@@ -11,7 +11,7 @@ from turtlesim.msg import Pose
 
 class Turtle:
     def __init__(self, turtle_name, pose_topic_substr='pose', vel_topic_substr='cmd_vel', pose_msg_type=Pose,
-                 vel_msg_type=Twist):
+                 vel_msg_type=Twist, namespace='turtlesim_align'):
         """
         @param turtle_name: Name of the turtle
         @param pose_topic_substr: substring used to get the pose topic of the turtle
@@ -24,14 +24,20 @@ class Turtle:
             - /<@param turtle_name>/<@param vel_topic_substr>
         """
         self.turtle_name = turtle_name
+        self.turtle_ns = namespace
+
+        # pose and vel topics
         self.pose_topic = {
-            KEY_TOPIC_NAME: str.format('/{}/{}', turtle_name, pose_topic_substr),
+            KEY_TOPIC_NAME: str.format('/{}/{}/{}', self.turtle_ns, self.turtle_name, pose_topic_substr),
             KEY_TOPIC_MSG_TYPE: pose_msg_type
         }
         self.vel_topic = {
-            KEY_TOPIC_NAME: str.format('/{}/{}', turtle_name, vel_topic_substr),
+            KEY_TOPIC_NAME: str.format('/{}/{}/{}', self.turtle_ns, self.turtle_name, vel_topic_substr),
             KEY_TOPIC_MSG_TYPE: vel_msg_type
         }
+
+        # Spawn service
+        self.spawn_service = str.format('/{}/spawn', self.turtle_ns)
 
         self.pose = Pose()
 
@@ -67,11 +73,11 @@ class Turtle:
         return vel_msg
 
     def spawn(self, x, y, theta):
-        rospy.wait_for_service('/spawn')
+        rospy.wait_for_service(self.spawn_service)
         try:
-
-            spn = rospy.ServiceProxy('/spawn', Spawn)
+            spn = rospy.ServiceProxy(self.spawn_service, Spawn)
             spn(x, y, theta, self.turtle_name)
+            rospy.loginfo('Turtlebot successfully spawned')
         except rospy.ServiceException as e:
-            rospy.logwarn("Service call failed, spawn")
+            rospy.logwarn('Service call failed, spawn')
             rospy.logwarn(e)
