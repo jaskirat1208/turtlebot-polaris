@@ -10,15 +10,20 @@ source devel/setup.[bash/zsh/sh] depending on your shell
 # Running the project
 In order to run the project and see the turtle self-align, do the following:
 
-![](extras/following_turtlebot.gif)
 ```
 roslaunch auto-align-turtlesim turtlesim.launch
 ```
+#### Output
+THe above program gives the following output:
 
-For simulating two turtlebots in motion, 
+![](extras/turtlesim.gif)
+
+----------------------------------------------------------
+If you have gazebo and turtlebot installed:
 ```
 roslaunch auto-align-turtlesim multi_turtlebot.launch
 ```
+![](extras/turtlebot.gif)
 
 Currently, this project only supports alignment for two turtlebots or two turtles in a simulator, however, 
 we can extend this functionality to different types of bots too.
