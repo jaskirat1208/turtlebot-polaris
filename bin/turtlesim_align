@@ -1,8 +1,9 @@
 #! /usr/bin/env python
 import rospy
+from turtlesim.msg import Pose
 
 from polaris_follower.controller import Controller
-from polaris_follower.turtle import Turtle
+from polaris_follower.robots.turtle import Turtle
 
 
 def main():
@@ -10,11 +11,13 @@ def main():
 
     # Initialize and spawn the turtles
     src = Turtle('turtle2')
-    src.spawn(1, 1, 90)
+    pose = Pose(1, 1, 90, 0, 0)
+    src.spawn(pose)
     dest = Turtle('turtle1')
 
     # Initialize the controller
-    Controller(src, dest)
+    controller = Controller(src, dest)
+    controller.simulate()
 
 
 if __name__ == '__main__':
