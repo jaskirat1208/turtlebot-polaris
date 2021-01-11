@@ -12,3 +12,6 @@ In order to run the project and see the turtle self-align, do the following:
 ```
 roslaunch auto-align-turtlesim turtlesim.launch
 ```
+
+# Example output
+![](https://github.com/jaskirat1208/turtlebot-polaris/blob/jaskirat/extras/following_turtlebot.gif)
