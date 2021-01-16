@@ -4,14 +4,20 @@ import rospy
 import message_filters
 
 from polaris_follower.constants import *
+from polaris_follower.controllers.base_controller import BaseController
 
 
-class Controller:
+class AlignmentController(BaseController):
+    """
+    Given a source and a destination object, this controller aligns the source object in the direction
+    of the destination object.
+    """
     def __init__(self, src, dest):
         """
         @param src: Source node
         @param dest: Destination node
         """
+        super().__init__()
         self.src = src
         self.dest = dest
 
