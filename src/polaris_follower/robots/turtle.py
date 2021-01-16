@@ -29,16 +29,8 @@ class Turtle(BaseRobot):
         """
         super().__init__(turtle_name, pose_topic_substr, vel_topic_substr, pose_msg_type, vel_msg_type, namespace)
 
-    def create_alignment_msg(self, dest_pose_msg):
-        """
-        @param dest_pose_msg: pose message of the object whose direction the turtle is to be aligned
-        @return: a twist message stating the speed of the bot
-        """
-        dest_theta = atan2(dest_pose_msg.y - self.pose.y, dest_pose_msg.x - self.pose.x)
-
-        vel_msg = Twist()
-        vel_msg.angular.z = dest_theta - self.pose.theta
-        return vel_msg
+    def _get_rotation_angle(self, x, y):
+        return atan2(y - self.pose.y, x - self.pose.x) - self.pose.theta
 
     def get_position_coordinates(self):
         """
