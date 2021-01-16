@@ -9,10 +9,10 @@ from turtlesim.msg import Pose
 from turtlesim.srv import Spawn
 
 # Local imports
-from polaris_follower.robots.base import Base
+from polaris_follower.robots.base import BaseRobot
 
 
-class Turtle(Base):
+class Turtle(BaseRobot):
     def __init__(self, turtle_name, pose_topic_substr='pose', vel_topic_substr='cmd_vel', pose_msg_type=Pose,
                  vel_msg_type=Twist, namespace='turtlesim_align'):
         """

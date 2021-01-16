@@ -3,7 +3,7 @@ import rospy
 from polaris_follower.constants import *
 
 
-class Base:
+class BaseRobot:
     def __init__(self, turtle_name, pose_topic_substr, vel_topic_substr, pose_msg_type,
                  vel_msg_type, namespace='turtlesim_align'):
         """

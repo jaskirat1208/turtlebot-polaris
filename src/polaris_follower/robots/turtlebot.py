@@ -7,11 +7,11 @@ from nav_msgs.msg import Odometry
 from tf.transformations import euler_from_quaternion
 from turtlesim.msg import Pose
 
-from polaris_follower.robots.base import Base
+from polaris_follower.robots.base import BaseRobot
 from polaris_follower.constants import *
 
 
-class Turtlebot(Base):
+class Turtlebot(BaseRobot):
     """
     Robot you control
     """
