@@ -2,6 +2,7 @@
 import rospy
 
 from polaris_follower.controllers import Follower
+from polaris_follower.planners import BasePlanner
 from polaris_follower.robots import Turtle
 
 
@@ -10,9 +11,10 @@ def main():
 
     # Initialize and spawn the turtles
     bot = Turtle('turtle1')
+    planner = BasePlanner()
 
     # Initialize the controller
-    controller = Follower(bot)
+    controller = Follower(bot, planner)
     controller.simulate()
     rospy.spin()
 
