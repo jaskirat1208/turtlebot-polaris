@@ -2,8 +2,8 @@
 import rospy
 from turtlesim.msg import Pose
 
-from polaris_follower.controllers.alignment_controller import AlignmentController
-from polaris_follower.robots.turtle import Turtle
+from polaris_follower.controllers import AlignmentController
+from polaris_follower.robots import Turtle
 
 
 def main():

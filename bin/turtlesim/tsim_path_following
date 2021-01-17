@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 import rospy
 
-from polaris_follower.controllers.follower import Follower
-from polaris_follower.robots.turtle import Turtle
+from polaris_follower.controllers import Follower
+from polaris_follower.robots import Turtle
 
 
 def main():

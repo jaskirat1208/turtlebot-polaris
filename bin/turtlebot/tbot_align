@@ -1,8 +1,8 @@
 #! /usr/bin/env python
 import rospy
 
-from polaris_follower.controllers.alignment_controller import AlignmentController
-from polaris_follower.robots.turtlebot import Turtlebot
+from polaris_follower.controllers import AlignmentController
+from polaris_follower.robots import Turtlebot
 
 
 def main():
