@@ -2,7 +2,6 @@
 from time import sleep
 
 import rospy
-import message_filters
 
 from polaris_follower.constants import *
 from polaris_follower.controllers.base_controller import BaseController

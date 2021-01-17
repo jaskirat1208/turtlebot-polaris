@@ -1,3 +1,7 @@
+from time import sleep
+
+import rospy
+
 from polaris_follower.controllers.base_controller import BaseController
 
 
@@ -12,11 +16,21 @@ class Follower(BaseController):
         self.robot = robot
         super().__init__(*args, **kwargs)
 
-    def simulate(self, x, y):
+    def simulate(self):
         """
         Given x, y coordinates of the destination, moves the robot to the point (x,y)
         :param x: X coordinate of destination
         :param y: Y coordinate of destination
         :return:
         """
-        self.robot.move_to_dest(x, y)
+        sleep(1)    # Sleep so that the robot positions can be updated first
+
+        robot_path = [
+            (1, 1),
+            (2, 2),
+            (2, 1)
+        ]
+        for (x, y) in robot_path:
+            self.robot.move_to_dest(x, y)
+
+        rospy.loginfo(str.format("Robot {} has reached its destination", self.robot.object_name))

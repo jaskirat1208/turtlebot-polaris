@@ -13,7 +13,7 @@ def main():
 
     # Initialize the controller
     controller = Follower(bot)
-    controller.simulate(1, 1)
+    controller.simulate()
     rospy.spin()
 
 

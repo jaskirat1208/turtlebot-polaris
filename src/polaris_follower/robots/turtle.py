@@ -1,5 +1,5 @@
 # Basic imports
-from math import atan2, sqrt
+from math import atan2
 
 # ROS imports
 import rospy

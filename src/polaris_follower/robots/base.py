@@ -105,7 +105,7 @@ class BaseRobot:
         :param y: y coordinate of destination
         :return:
         """
-        rospy.loginfo_once("Translation begins")
+        rospy.loginfo("Translation begins")
 
         vel_msg = self.vel_topic[KEY_TOPIC_MSG_TYPE]()
         dist = self._get_distance_from_xy(x, y)
@@ -117,7 +117,7 @@ class BaseRobot:
             self.vel_pub.publish(vel_msg)
             dist = self._get_distance_from_xy(x, y)
 
-        rospy.loginfo_once(str.format("Translation complete. {} is now at ({}, {})", self.object_name, x, y))
+        rospy.loginfo(str.format("Translation complete. {} is now at ({}, {})", self.object_name, x, y))
 
     def _rotate(self, x, y):
         """
@@ -126,7 +126,7 @@ class BaseRobot:
         :param y: y coordinate of destination
         :return:
         """
-        rospy.loginfo_once("Rotation begins")
+        rospy.loginfo("Rotation begins")
 
         vel_msg = self.vel_topic[KEY_TOPIC_MSG_TYPE]()
         theta = self._get_rotation_angle(x, y)
@@ -135,7 +135,7 @@ class BaseRobot:
             self.vel_pub.publish(vel_msg)
             theta = self._get_rotation_angle(x, y)
 
-        rospy.loginfo_once("Rotation complete")
+        rospy.loginfo("Rotation complete")
 
     def align_with_dest(self, dest_obj):
         """
