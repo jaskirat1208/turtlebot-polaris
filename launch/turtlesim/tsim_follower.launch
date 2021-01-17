@@ -2,7 +2,7 @@
 
   <group ns="turtlesim_align">
       <node pkg="turtlesim" name="turtle1" type="turtlesim_node"/>
-      <node pkg="auto-align-turtlesim" name="align_bot" type="path_following"/>
+      <node pkg="auto-align-turtlesim" name="align_bot" type="tsim_path_following"/>
   </group>
 
 

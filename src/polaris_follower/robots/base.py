@@ -8,6 +8,7 @@ from polaris_follower.constants import *
 
 class BaseRobot:
     scale_factor = 0.5  # to scale the speed as 0.5 * difference
+    max_speed = 2
 
     def __init__(self, turtle_name, pose_topic_substr, vel_topic_substr, pose_msg_type,
                  vel_msg_type, namespace='tbot_align'):
@@ -109,7 +110,7 @@ class BaseRobot:
         vel_msg = self.vel_topic[KEY_TOPIC_MSG_TYPE]()
         dist = self._get_distance_from_xy(x, y)
         while dist > ANGULAR_DIST_THRESHOLD:
-            vel_msg.linear.x = min(dist, 2) * self.scale_factor
+            vel_msg.linear.x = min(dist, self.max_speed) * self.scale_factor
             vel_msg.angular.z = self._get_rotation_angle(x, y) * self.scale_factor
             rospy.loginfo_throttle(LOG_FREQUENCY, str.format("Moving to ({}, {}). {} units away", x, y, dist))
 

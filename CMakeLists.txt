@@ -160,7 +160,7 @@ include_directories(
 ## Mark executable scripts (Python etc.) for installation
 ## in contrast to setup.py, you can choose the destination
 catkin_install_python(
-  PROGRAMS bin/turtlesim/tsim_align bin/turtlesim/path_following bin/turtlebot/tbot_align
+  PROGRAMS bin/turtlesim/tsim_align bin/turtlesim/tsim_path_following bin/turtlebot/tbot_align bin/turtlebot/tbot_path_following
   DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 )
 

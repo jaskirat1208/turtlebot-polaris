@@ -8,10 +8,10 @@ from tf.transformations import euler_from_quaternion
 from turtlesim.msg import Pose
 
 from polaris_follower.robots.base import BaseRobot
-from polaris_follower.constants import *
 
 
 class Turtlebot(BaseRobot):
+    max_speed = 1
     """
     Turtlebot: could be in a gazebo simulator or a real turtlebot
     """
@@ -41,8 +41,6 @@ class Turtlebot(BaseRobot):
         self_pose = self.get_position_coordinates()
         dest_theta = atan2(y - self_pose.y, x - self_pose.x)
 
-        rospy.loginfo_throttle(LOG_FREQUENCY, str.format("Desired orientation: {}", dest_theta))
-        rospy.loginfo_throttle(LOG_FREQUENCY, str.format("Current orientation: {}", self_pose.theta))
         return dest_theta - self_pose.theta
 
     def spawn(self, pose_coordinates):

@@ -1,16 +1,15 @@
 #!/usr/bin/env python
 import rospy
-from turtlesim.msg import Pose
 
 from polaris_follower.controllers.follower import Follower
-from polaris_follower.robots.turtle import Turtle
+from polaris_follower.robots.turtlebot import Turtlebot
 
 
 def main():
     rospy.init_node('Controller')
 
     # Initialize and spawn the turtles
-    bot = Turtle('turtle1')
+    bot = Turtlebot('tb3_0')
 
     # Initialize the controller
     controller = Follower(bot)
