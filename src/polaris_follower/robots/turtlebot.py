@@ -48,13 +48,3 @@ class Turtlebot(BaseRobot):
     def spawn(self, pose_coordinates):
         pass
 
-    @staticmethod
-    def move_to_dest(x, y):
-        """
-        Given x, y, moves the turtlebot to the point (x,y)
-        :param x: x coordinate
-        :param y: y coordinate
-        :return:
-        """
-        while rospy.is_shutdown():
-            pass

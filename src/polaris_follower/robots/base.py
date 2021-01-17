@@ -1,4 +1,7 @@
+from math import sqrt
+
 import rospy
+from turtlesim.msg import Pose
 
 from polaris_follower.constants import *
 
@@ -7,7 +10,7 @@ class BaseRobot:
     scale_factor = 0.5  # to scale the speed as 0.5 * difference
 
     def __init__(self, turtle_name, pose_topic_substr, vel_topic_substr, pose_msg_type,
-                 vel_msg_type, namespace='turtlesim_align'):
+                 vel_msg_type, namespace='tbot_align'):
         """
         @param turtle_name: Name of the turtle
         @param pose_topic_substr: substring used to get the pose topic of the turtle
@@ -85,10 +88,39 @@ class BaseRobot:
         Returns the position coordinates (x,y, theta)
         :return:
         """
-        pass
+        return Pose()
 
     def _get_rotation_angle(self, x, y):
         return 0
+
+    def _get_distance_from_disp_vec(self, vec):
+        return sqrt(vec.x**2 + vec.y**2)
+
+    def _get_disp_vector(self, x, y):
+        return Pose()
+
+    def _translate(self, x, y):
+        """
+        Moves towards (x, y)
+        :param x: x coordinate of destination
+        :param y: y coordinate of destination
+        :return:
+        """
+        rospy.loginfo_once("Translation begins")
+
+        vel_msg = self.vel_topic[KEY_TOPIC_MSG_TYPE]()
+        disp_vec = self._get_disp_vector(x, y)
+        dist = self._get_distance_from_disp_vec(disp_vec)
+        while dist > ANGULAR_DIST_THRESHOLD:
+            vel_msg.linear.x = min(dist, 2) * self.scale_factor
+            vel_msg.angular.z = self._get_rotation_angle(x, y) * self.scale_factor
+            rospy.loginfo_throttle(LOG_FREQUENCY, str.format("Moving to ({}, {}). {} units away", x, y, dist))
+
+            self.vel_pub.publish(vel_msg)
+            disp_vec = self._get_disp_vector(x, y)
+            dist = self._get_distance_from_disp_vec(disp_vec)
+
+        rospy.loginfo_once(str.format("Translation complete. {} is now at ({}, {})", self.object_name, x, y))
 
     def _rotate(self, x, y):
         """
@@ -97,23 +129,34 @@ class BaseRobot:
         :param y: y coordinate of destination
         :return:
         """
-        rospy.loginfo("Rotation begins")
+        rospy.loginfo_once("Rotation begins")
+
         vel_msg = self.vel_topic[KEY_TOPIC_MSG_TYPE]()
-        theta = init_theta = self._get_rotation_angle(x, y)
-        while theta / init_theta > ANGULAR_DIST_THRESHOLD:
+        theta = self._get_rotation_angle(x, y)
+        while abs(theta) > ANGULAR_DIST_THRESHOLD:
             vel_msg.angular.z = theta * self.scale_factor
             self.vel_pub.publish(vel_msg)
             theta = self._get_rotation_angle(x, y)
 
-        rospy.loginfo("Rotation complete")
+        rospy.loginfo_once("Rotation complete")
 
     def align_with_dest(self, dest_obj):
         """
-        :param dest_obj: Destination object along which it self-aligns
+        :param dest_obj: Destination robot along which it self-aligns
         """
         while not rospy.is_shutdown():
             dest_pose_msg = dest_obj.get_position_coordinates()
             self._rotate(dest_pose_msg.x, dest_pose_msg.y)
+
+    def move_to_dest(self, x, y):
+        """
+        Given x, y, moves the robot to the point (x,y)
+        :param x: x coordinate
+        :param y: y coordinate
+        :return:
+        """
+        self._rotate(x, y)
+        self._translate(x, y)
 
     def spawn(self, pose_coordinates):
         """
