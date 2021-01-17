@@ -93,11 +93,9 @@ class BaseRobot:
     def _get_rotation_angle(self, x, y):
         return 0
 
-    def _get_distance_from_disp_vec(self, vec):
-        return sqrt(vec.x**2 + vec.y**2)
-
-    def _get_disp_vector(self, x, y):
-        return Pose()
+    def _get_distance_from_xy(self, x, y):
+        self_pose = self.get_position_coordinates()
+        return sqrt((x - self_pose.x)**2 + (y - self_pose.y)**2)
 
     def _translate(self, x, y):
         """
@@ -109,16 +107,14 @@ class BaseRobot:
         rospy.loginfo_once("Translation begins")
 
         vel_msg = self.vel_topic[KEY_TOPIC_MSG_TYPE]()
-        disp_vec = self._get_disp_vector(x, y)
-        dist = self._get_distance_from_disp_vec(disp_vec)
+        dist = self._get_distance_from_xy(x, y)
         while dist > ANGULAR_DIST_THRESHOLD:
             vel_msg.linear.x = min(dist, 2) * self.scale_factor
             vel_msg.angular.z = self._get_rotation_angle(x, y) * self.scale_factor
             rospy.loginfo_throttle(LOG_FREQUENCY, str.format("Moving to ({}, {}). {} units away", x, y, dist))
 
             self.vel_pub.publish(vel_msg)
-            disp_vec = self._get_disp_vector(x, y)
-            dist = self._get_distance_from_disp_vec(disp_vec)
+            dist = self._get_distance_from_xy(x, y)
 
         rospy.loginfo_once(str.format("Translation complete. {} is now at ({}, {})", self.object_name, x, y))
 

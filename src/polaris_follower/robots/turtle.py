@@ -32,9 +32,6 @@ class Turtle(BaseRobot):
     def _get_rotation_angle(self, x, y):
         return atan2(y - self.pose.y, x - self.pose.x) - self.pose.theta
 
-    def _get_disp_vector(self, x, y):
-        return Pose(x - self.pose.x, y - self.pose.y, 0, 0, 0)
-
     def get_position_coordinates(self):
         """
         :return: returns a turtlesim.msg -> Pose object
