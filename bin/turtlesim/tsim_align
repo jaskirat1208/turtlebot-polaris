@@ -2,8 +2,8 @@
 import rospy
 from turtlesim.msg import Pose
 
-from polaris_follower.controller import Controller
-from polaris_follower.robots.turtle import Turtle
+from polaris_follower.controllers import AlignmentController
+from polaris_follower.robots import Turtle
 
 
 def main():
@@ -16,8 +16,9 @@ def main():
     dest = Turtle('turtle1')
 
     # Initialize the controller
-    controller = Controller(src, dest)
+    controller = AlignmentController(src, dest)
     controller.simulate()
+    rospy.spin()
 
 
 if __name__ == '__main__':

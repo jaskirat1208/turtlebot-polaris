@@ -1,0 +1,23 @@
+#!/usr/bin/env python
+import rospy
+
+from polaris_follower.controllers import Follower
+from polaris_follower.robots import Turtlebot
+from polaris_follower.planners import BasePlanner
+
+
+def main():
+    rospy.init_node('Controller')
+
+    # Initialize and spawn the turtles
+    bot = Turtlebot('tb3_0')
+    planner = BasePlanner()
+
+    # Initialize the controller
+    controller = Follower(bot, planner)
+    controller.simulate()
+    rospy.spin()
+
+
+if __name__ == '__main__':
+    main()

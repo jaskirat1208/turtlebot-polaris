@@ -1,11 +1,17 @@
+from math import sqrt
+
 import rospy
+from turtlesim.msg import Pose
 
 from polaris_follower.constants import *
 
 
-class Base:
+class BaseRobot:
+    scale_factor = 0.5  # to scale the speed as 0.5 * difference
+    max_speed = 2
+
     def __init__(self, turtle_name, pose_topic_substr, vel_topic_substr, pose_msg_type,
-                 vel_msg_type, namespace='turtlesim_align'):
+                 vel_msg_type, namespace='tbot_align'):
         """
         @param turtle_name: Name of the turtle
         @param pose_topic_substr: substring used to get the pose topic of the turtle
@@ -42,7 +48,21 @@ class Base:
         rospy.loginfo("Spawn service:")
         rospy.loginfo(self.spawn_service)
 
+        # Creating publisher and subscriber for the robot
+        self.vel_pub = rospy.Publisher(
+            self.vel_topic[KEY_TOPIC_NAME], self.vel_topic[KEY_TOPIC_MSG_TYPE], queue_size=QUEUE_SIZE)
+        self.pose_sub = rospy.Subscriber(
+            self.pose_topic[KEY_TOPIC_NAME], self.pose_topic[KEY_TOPIC_MSG_TYPE], self.pose_cb)
+
         self.pose = pose_msg_type()
+
+    def pose_cb(self, pose_data):
+        """
+        A callback function to pose subscriber. Updates the position of the robot
+        :param pose_data: Message fetched by the subscriber
+        """
+        rospy.loginfo_throttle(LOG_FREQUENCY, str.format("Updating pose data for {}", self.object_name))
+        self.set_pose(pose_data)
 
     def get_pose_topic(self):
         """
@@ -69,16 +89,71 @@ class Base:
         Returns the position coordinates (x,y, theta)
         :return:
         """
-        pass
+        return Pose()
 
-    def create_alignment_msg(self, dest_pos_coordinates):
+    def _get_rotation_angle(self, x, y):
+        return 0
+
+    def _get_distance_from_xy(self, x, y):
+        self_pose = self.get_position_coordinates()
+        return sqrt((x - self_pose.x)**2 + (y - self_pose.y)**2)
+
+    def _translate(self, x, y):
         """
-        Given position coordinates (x,y, theta), it creates a message
-        to be passed on to the velocity pubisher
-        :param dest_pos_coordinates: (x, y, theta)
-        :return: Vel message
+        Moves towards (x, y)
+        :param x: x coordinate of destination
+        :param y: y coordinate of destination
+        :return:
         """
-        pass
+        rospy.loginfo("Translation begins")
+
+        vel_msg = self.vel_topic[KEY_TOPIC_MSG_TYPE]()
+        dist = self._get_distance_from_xy(x, y)
+        while dist > ANGULAR_DIST_THRESHOLD:
+            vel_msg.linear.x = min(dist, self.max_speed) * self.scale_factor
+            vel_msg.angular.z = self._get_rotation_angle(x, y) * self.scale_factor
+            rospy.loginfo_throttle(LOG_FREQUENCY, str.format("Moving to ({}, {}). {} units away", x, y, dist))
+
+            self.vel_pub.publish(vel_msg)
+            dist = self._get_distance_from_xy(x, y)
+
+        rospy.loginfo(str.format("Translation complete. {} is now at ({}, {})", self.object_name, x, y))
+
+    def _rotate(self, x, y):
+        """
+        Rotates in the direction of x,y
+        :param x: x coordinate of destination
+        :param y: y coordinate of destination
+        :return:
+        """
+        rospy.loginfo("Rotation begins")
+
+        vel_msg = self.vel_topic[KEY_TOPIC_MSG_TYPE]()
+        theta = self._get_rotation_angle(x, y)
+        while abs(theta) > ANGULAR_DIST_THRESHOLD:
+            vel_msg.angular.z = theta * self.scale_factor
+            self.vel_pub.publish(vel_msg)
+            theta = self._get_rotation_angle(x, y)
+
+        rospy.loginfo("Rotation complete")
+
+    def align_with_dest(self, dest_obj):
+        """
+        :param dest_obj: Destination robot along which it self-aligns
+        """
+        while not rospy.is_shutdown():
+            dest_pose_msg = dest_obj.get_position_coordinates()
+            self._rotate(dest_pose_msg.x, dest_pose_msg.y)
+
+    def move_to_dest(self, x, y):
+        """
+        Given x, y, moves the robot to the point (x,y)
+        :param x: x coordinate
+        :param y: y coordinate
+        :return:
+        """
+        self._rotate(x, y)
+        self._translate(x, y)
 
     def spawn(self, pose_coordinates):
         """

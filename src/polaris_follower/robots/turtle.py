@@ -9,10 +9,10 @@ from turtlesim.msg import Pose
 from turtlesim.srv import Spawn
 
 # Local imports
-from polaris_follower.robots.base import Base
+from polaris_follower.robots.base import BaseRobot
 
 
-class Turtle(Base):
+class Turtle(BaseRobot):
     def __init__(self, turtle_name, pose_topic_substr='pose', vel_topic_substr='cmd_vel', pose_msg_type=Pose,
                  vel_msg_type=Twist, namespace='turtlesim_align'):
         """
@@ -29,16 +29,8 @@ class Turtle(Base):
         """
         super().__init__(turtle_name, pose_topic_substr, vel_topic_substr, pose_msg_type, vel_msg_type, namespace)
 
-    def create_alignment_msg(self, dest_pose_msg):
-        """
-        @param dest_pose_msg: pose message of the object whose direction the turtle is to be aligned
-        @return: a twist message stating the speed of the bot
-        """
-        dest_theta = atan2(dest_pose_msg.y - self.pose.y, dest_pose_msg.x - self.pose.x)
-
-        vel_msg = Twist()
-        vel_msg.angular.z = dest_theta - self.pose.theta
-        return vel_msg
+    def _get_rotation_angle(self, x, y):
+        return atan2(y - self.pose.y, x - self.pose.x) - self.pose.theta
 
     def get_position_coordinates(self):
         """
