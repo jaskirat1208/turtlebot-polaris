@@ -98,6 +98,9 @@ class BaseRobot:
         self_pose = self.get_position_coordinates()
         return sqrt((x - self_pose.x)**2 + (y - self_pose.y)**2)
 
+    def _stop(self):
+        self.vel_pub.publish(self.vel_topic[KEY_TOPIC_MSG_TYPE]())
+
     def _translate(self, x, y):
         """
         Moves towards (x, y)
@@ -118,6 +121,7 @@ class BaseRobot:
             dist = self._get_distance_from_xy(x, y)
 
         rospy.loginfo(str.format("Translation complete. {} is now at ({}, {})", self.object_name, x, y))
+        self._stop()
 
     def _rotate(self, x, y):
         """
@@ -136,6 +140,7 @@ class BaseRobot:
             theta = self._get_rotation_angle(x, y)
 
         rospy.loginfo("Rotation complete")
+        self._stop()
 
     def align_with_dest(self, dest_obj):
         """

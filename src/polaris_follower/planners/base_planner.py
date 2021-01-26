@@ -2,7 +2,7 @@ from polaris_follower.utils import Point
 
 
 class BasePlanner:
-    def __init__(self):
+    def __init__(self, *args, **kwargs):
         """
         Initialize the arena
         """

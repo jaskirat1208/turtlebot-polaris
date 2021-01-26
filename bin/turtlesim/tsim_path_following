@@ -2,8 +2,9 @@
 import rospy
 
 from polaris_follower.controllers import Follower
-from polaris_follower.planners import BasePlanner
+from polaris_follower.planners import AStarPlanner
 from polaris_follower.robots import Turtle
+from polaris_follower.utils import *
 
 
 def main():
@@ -11,11 +12,14 @@ def main():
 
     # Initialize and spawn the turtles
     bot = Turtle('turtle1')
-    planner = BasePlanner()
+    dest = get_point_from_user_input()
+    planner = AStarPlanner()
 
     # Initialize the controller
     controller = Follower(bot, planner)
-    controller.simulate()
+
+    # Simulate the trajectory of the turtlebot from its current position to its destination
+    controller.simulate(dest)
     rospy.spin()
 
 
